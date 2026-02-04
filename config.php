@@ -33,7 +33,7 @@ $CFG->libdir    = '/var/www/html/lib';
 
 // Railway terminates HTTPS at the edge → container sees HTTP.
 // Moodle MUST be told this to avoid redirect loops.
-$CFG->reverseproxy = true;
+// $CFG->reverseproxy = true;
 $CFG->sslproxy     = true;
 
 
