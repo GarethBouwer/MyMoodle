@@ -1,6 +1,6 @@
 FROM php:8.1-apache
 
-# Install Moodle PHP dependencies (Apache + mod_php already set up in this image)
+# Install Moodle PHP dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -18,11 +18,21 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy Moodle into the container
+# Moodle lives here
+WORKDIR /var/www/html
+
+# Copy Moodle source
 COPY . /var/www/html
 
-# Create moodledata and set permissions (Moodle requires this per docs)
+# Moodle data directory (backed by Railway volume)
 RUN mkdir -p /var/www/moodledata \
  && chown -R www-data:www-data /var/www/html /var/www/moodledata
 
 EXPOSE 80
+
+# Custom entrypoint that fixes Apache MPMs on Railway (from official Station solution)
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Use our script as the main command; ENTRYPOINT from php:8.1-apache stays the same
+CMD ["/usr/local/bin/docker-entrypoint.sh"]
