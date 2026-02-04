@@ -4,14 +4,28 @@ unset($CFG);
 global $CFG;
 $CFG = new stdClass();
 
-// 1. DATABASE SETUP (PostgreSQL on Railway)
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+
+// ========= DATABASE (PostgreSQL on Railway) =========
 $CFG->dbtype    = 'pgsql';
 $CFG->dblibrary = 'native';
-$CFG->dbhost    = 'mymoodle.railway.internal';  // value from RAILWAY_PRIVATE_DOMAIN
-$CFG->dbname    = 'railway';                      // POSTGRES_DB
-$CFG->dbuser    = 'postgres';                     // POSTGRES_USER
-$CFG->dbpass    = 'krXPKhTItzkebxZHRAsGMPgTNuTxagzv';             // POSTGRES_PASSWORD
-$CFG->prefix    = 'mdl_';                         // table prefix (leave as mdl_)
+
+// IMPORTANT: set this to the actual PGHOST value from your Postgres service
+$CFG->dbhost    = 'postgres.railway.internal';
+
+$CFG->dbname    = 'railway';  // POSTGRES_DB
+$CFG->dbuser    = 'postgres'; // POSTGRES_USER
+$CFG->dbpass    = 'krXPKhTItzkebxZHRAsGMPgTNuTxagzv'; // POSTGRES_PASSWORD
+$CFG->prefix    = 'mdl_';
+
+$CFG->dboptions = array(
+    'dbpersist' => false,
+    'dbport'    => 5432,
+    'dbsocket'  => false,
+);
+
 
 $CFG->dboptions = array(
     'dbpersist' => false,
