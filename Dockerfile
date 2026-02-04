@@ -1,6 +1,6 @@
 FROM php:8.1-apache
 
-# Install dependencies (no extra apache packages)
+# Install Moodle PHP dependencies (Apache + mod_php already set up in this image)
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -15,20 +15,14 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libldap2-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql ldap opcache \
+ && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy Moodle into the container
 COPY . /var/www/html
 
-# Create moodledata and fix permissions
+# Create moodledata and set permissions (Moodle requires this per docs)
 RUN mkdir -p /var/www/moodledata \
  && chown -R www-data:www-data /var/www/html /var/www/moodledata
 
-# Custom entrypoint that enforces MPM choice at container start
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 EXPOSE 80
-
-CMD ["docker-entrypoint.sh"]
