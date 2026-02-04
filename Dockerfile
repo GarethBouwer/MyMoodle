@@ -18,21 +18,14 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
  && rm -rf /var/lib/apt/lists/*
 
-# Moodle lives here
+# Web root
 WORKDIR /var/www/html
 
 # Copy Moodle source
 COPY . /var/www/html
 
-# Moodle data directory (backed by Railway volume)
+# Moodle data directory (your Railway volume mounts here)
 RUN mkdir -p /var/www/moodledata \
  && chown -R www-data:www-data /var/www/html /var/www/moodledata
 
 EXPOSE 80
-
-# Custom entrypoint that fixes Apache MPMs on Railway (from official Station solution)
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Use our script as the main command; ENTRYPOINT from php:8.1-apache stays the same
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
