@@ -1,6 +1,9 @@
 FROM php:8.1-apache
 
-# Install Moodle PHP dependencies
+# Enable Apache rewrite for clean URLs (recommended by Moodle)
+RUN a2enmod rewrite
+
+# Install system deps needed for Moodle + PostgreSQL extensions
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -15,7 +18,16 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libldap2-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
+ && docker-php-ext-install \
+        gd \
+        intl \
+        xml \
+        zip \
+        mbstring \
+        curl \
+        pgsql \
+        pdo_pgsql \
+        opcache \
  && rm -rf /var/lib/apt/lists/*
 
 # Web root
@@ -24,7 +36,7 @@ WORKDIR /var/www/html
 # Copy Moodle source
 COPY . /var/www/html
 
-# Moodle data directory (your Railway volume mounts here)
+# Moodle data directory (Railway volume mounts here)
 RUN mkdir -p /var/www/moodledata \
  && chown -R www-data:www-data /var/www/html /var/www/moodledata
 
