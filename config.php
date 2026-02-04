@@ -34,7 +34,7 @@ $CFG->dboptions = array(
 );
 
 // 2. PATHS
-$CFG->wwwroot  = 'https://mymoodle-production.up.railway.app/';      // e.g. https://mymoodle-production.up.railway.app
+$CFG->wwwroot  = 'https://mymoodle-production.up.railway.app';      // e.g. https://mymoodle-production.up.railway.app
 $CFG->dirroot  = '/var/www/html';
 $CFG->dataroot = '/var/www/moodledata';
 $CFG->libdir   = '/var/www/html/lib';
