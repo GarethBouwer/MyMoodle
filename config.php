@@ -23,6 +23,8 @@ $CFG->dboptions = array(
 $CFG->wwwroot  = 'https://mymoodle-production.up.railway.app/';      // e.g. https://mymoodle-production.up.railway.app
 $CFG->dirroot  = '/var/www/html';
 $CFG->dataroot = '/var/www/moodledata';
+$CFG->libdir   = '/var/www/html/lib';
+
 
 // 3. ADMIN USERNAME (URL path, not the login)
 $CFG->admin = 'admin';
