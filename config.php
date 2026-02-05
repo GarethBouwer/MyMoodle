@@ -36,6 +36,11 @@ $CFG->libdir    = '/var/www/html/lib';
 // $CFG->reverseproxy = true;
 $CFG->sslproxy     = true;
 
+// ========= DEBUG SMTP =========
+$CFG->debug = E_ALL;
+$CFG->debugdisplay = true;
+$CFG->debugsmtp = true;
+
 
 // ========= ADMIN URL SEGMENT =========
 
