@@ -47,7 +47,13 @@ const updatePreferences = (filter, value) => {
     }
 
     return setUserPreference(type, value)
-        .catch(Notification.exception);
+        .catch((err) => {
+            // Avoid showing an undefined dialog to users; log and silently continue.
+            // Notification.exception sometimes renders a generic/undefined message in older builds.
+            // Logging helps debugging while preventing a confusing alert.
+            // eslint-disable-next-line no-console
+            console && console.error && console.error('block_myoverview: updatePreferences error', err);
+        });
 };
 
 /**
