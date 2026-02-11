@@ -34,6 +34,7 @@
                 {{#lastaccessed}}{{#str}} sortbylastaccessed, block_myoverview {{/str}}{{/lastaccessed}}
                 {{#shortname}}{{#str}} sortbyshortname, block_myoverview {{/str}}{{/shortname}}
                 {{#startdate}}{{#str}} sortbystartdate, block_myoverview {{/str}}{{/startdate}}
+                {{#categoryidnumber}}{{#str}} sortbycategoryidnumber, block_myoverview {{/str}}{{/categoryidnumber}}
             </span>
         </button>
         <ul class="dropdown-menu" role="menu" data-show-active-item data-skip-active-class="true" aria-labelledby="sortingdropdown">
@@ -62,6 +63,11 @@
             <li>
                 <a class="dropdown-item" href="#" data-filter="sort" data-pref="idnumber" data-value="idnumber" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#idnumber}}aria-current="true"{{/idnumber}}>
                     {{#str}} sortbyidnumber, block_myoverview {{/str}}
+                 </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#" data-filter="sort" data-pref="categoryidnumber" data-value="categoryidnumber" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#categoryidnumber}}aria-current="true"{{/categoryidnumber}}>
+                    {{#str}} sortbycategoryidnumber, block_myoverview {{/str}}
                  </a>
             </li>
         </ul>

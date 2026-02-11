@@ -88,6 +88,7 @@ $string['sortbylastaccessed'] = 'Sort by last accessed';
 $string['sortbyshortname'] = 'Sort by short name';
 $string['sortbystartdate'] = 'Sort by start date';
 $string['sortbyidnumber'] = 'Course ID number';
+$string['sortbycategoryidnumber'] = 'Category ID number';
 $string['privacy:request:preference:set'] = 'The value of the setting \'{$a->name}\' was \'{$a->value}\'';
 $string['viewquickstart'] = 'View Quickstart guide';
 $string['zero_default_title'] = 'You\'re not enrolled in any courses.';

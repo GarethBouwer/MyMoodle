@@ -475,6 +475,11 @@ class main implements renderable, templatable {
                 // $sort = 'category, idnumber';
                 break;
 
+            case BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER:
+                // Sort by the category idnumber assigned to the course's category.
+                $sort = 'categoryidnumber';
+                break;
+
             case BLOCK_MYOVERVIEW_SORTING_TITLE:
             default:
                 $sort = 'fullname';
@@ -507,6 +512,7 @@ class main implements renderable, templatable {
             'selectedcustomfield' => $selectedcustomfield,
             'showsortbyshortname' => $CFG->courselistshortnames,
             'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
+            'categoryidnumber' => $this->sort == BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER,
         ];
         return array_merge($defaultvariables, $preferences);
 

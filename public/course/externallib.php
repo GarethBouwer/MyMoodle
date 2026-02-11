@@ -4071,6 +4071,11 @@ class core_course_external extends external_api {
         $limit = $params['limit'];
         $offset = $params['offset'];
         $sort = $params['sort'];
+        // Support sorting by category idnumber (the idnumber assigned to the course's category).
+        // Translate the token into an SQL expression that can be used in the ORDER BY.
+        if ($sort === 'categoryidnumber') {
+            $sort = "(SELECT cc.idnumber FROM {course_categories} cc WHERE cc.id = c.category)";
+        }
         $customfieldvalue = $params['customfieldvalue'];
         $searchvalue = clean_param($params['searchvalue'], PARAM_TEXT);
         $requiredfields = $params['requiredfields'];
