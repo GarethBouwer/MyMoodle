@@ -514,6 +514,17 @@ class main implements renderable, templatable {
             'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
             'categoryidnumber' => $this->sort == BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER,
         ];
+        // Make sure client-side templates have the translated sort strings available.
+        $page = $output->get_page();
+        $page->requires->strings_for_js([
+            'sortbytitle',
+            'sortbylastaccessed',
+            'sortbyshortname',
+            'sortbystartdate',
+            'sortbyidnumber',
+            'sortbycategoryidnumber'
+        ], 'block_myoverview');
+
         return array_merge($defaultvariables, $preferences);
 
     }
