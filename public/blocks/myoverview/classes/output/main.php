@@ -506,6 +506,7 @@ class main implements renderable, templatable {
             'customfieldvalues' => $customfieldvalues,
             'selectedcustomfield' => $selectedcustomfield,
             'showsortbyshortname' => $CFG->courselistshortnames,
+            'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
         ];
         return array_merge($defaultvariables, $preferences);
 
