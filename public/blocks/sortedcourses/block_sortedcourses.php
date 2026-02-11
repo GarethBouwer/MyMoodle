@@ -8,15 +8,13 @@ class block_sortedcourses extends block_base {
     }
 
     public function applicable_formats() {
-        // Only show on the Dashboard.
-        return [
-            'my' => true,
-            'site' => false,
-            'course-view' => false,
-            'mod' => false,
-            'tag' => false
-        ];
-    }
+    // Allow on all pages – you can still choose
+    // where to place it via the UI.
+    return [
+        'all' => true
+    ];
+}
+
 
     public function instance_allow_multiple() {
         // Only one instance per Dashboard.
