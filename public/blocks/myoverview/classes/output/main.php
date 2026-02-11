@@ -450,7 +450,7 @@ class main implements renderable, templatable {
                 }
             }
         }
-        $preferences = $this->get_preferences_as_booleans();
+                $preferences = $this->get_preferences_as_booleans();
         $availablelayouts = $this->get_formatted_available_layouts_for_export();
         $sort = '';
 
@@ -458,12 +458,23 @@ class main implements renderable, templatable {
             case BLOCK_MYOVERVIEW_SORTING_SHORTNAME:
                 $sort = 'shortname';
                 break;
+
             case BLOCK_MYOVERVIEW_SORTING_LASTACCESSED:
                 $sort = 'ul.timeaccess desc';
                 break;
+
             case BLOCK_MYOVERVIEW_SORTING_STARTDATE:
                 $sort = 'startdate';
                 break;
+
+            case BLOCK_MYOVERVIEW_SORTING_IDNUMBER:
+                // Pure ID number sort:
+                $sort = 'idnumber';
+
+                // If you prefer category + ID number, use this instead:
+                // $sort = 'category, idnumber';
+                break;
+
             case BLOCK_MYOVERVIEW_SORTING_TITLE:
             default:
                 $sort = 'fullname';

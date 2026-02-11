@@ -49,6 +49,8 @@ define('BLOCK_MYOVERVIEW_SORTING_TITLE', 'title');
 define('BLOCK_MYOVERVIEW_SORTING_LASTACCESSED', 'lastaccessed');
 define('BLOCK_MYOVERVIEW_SORTING_SHORTNAME', 'shortname');
 define('BLOCK_MYOVERVIEW_SORTING_STARTDATE', 'startdate');
+define('BLOCK_MYOVERVIEW_SORTING_IDNUMBER', 'idnumber');
+
 
 /**
  * Constants for the user preferences view options
@@ -104,18 +106,18 @@ function block_myoverview_user_preferences(): array {
         'permissioncallback' => [core_user::class, 'is_current_user'],
     ];
 
-    $preferences['block_myoverview_user_sort_preference'] = array(
-        'null' => NULL_NOT_ALLOWED,
-        'default' => BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
-        'type' => PARAM_ALPHA,
-        'choices' => array(
-            BLOCK_MYOVERVIEW_SORTING_TITLE,
-            BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
-            BLOCK_MYOVERVIEW_SORTING_SHORTNAME,
-            BLOCK_MYOVERVIEW_SORTING_STARTDATE,
-        ),
-        'permissioncallback' => [core_user::class, 'is_current_user'],
-    );
+    $preferences['block_myoverview_user_sort_preference'] = [
+    'null'   => NULL_NOT_ALLOWED,
+    'default'=> BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+    'type'   => PARAM_ALPHA,
+    'choices'=> [
+        BLOCK_MYOVERVIEW_SORTING_LASTACCESSED => get_string('sortbylastaccessed', 'block_myoverview'),
+        BLOCK_MYOVERVIEW_SORTING_TITLE        => get_string('sortbytitle', 'block_myoverview'),
+        BLOCK_MYOVERVIEW_SORTING_SHORTNAME    => get_string('sortbyshortname', 'block_myoverview'),
+        BLOCK_MYOVERVIEW_SORTING_IDNUMBER     => get_string('sortbyidnumber', 'block_myoverview'),
+    ],
+    'permissioncallback' => [core_user::class, 'is_current_user'],
+];
 
     $preferences['block_myoverview_user_view_preference'] = array(
         'null' => NULL_NOT_ALLOWED,
