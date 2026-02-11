@@ -54,4 +54,13 @@ $CFG->directorypermissions = 0777;
 
 // ========= START MOODLE =========
 
+// If running locally on Windows override dataroot to a workspace-local folder.
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    $localdataroot = __DIR__ . DIRECTORY_SEPARATOR . 'moodledata';
+    if (!file_exists($localdataroot)) {
+        @mkdir($localdataroot, 0777, true);
+    }
+    $CFG->dataroot = $localdataroot;
+}
+
 require_once(__DIR__ . '/lib/setup.php');
