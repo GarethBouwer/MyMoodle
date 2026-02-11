@@ -475,10 +475,7 @@ class main implements renderable, templatable {
                 // $sort = 'category, idnumber';
                 break;
 
-            case BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER:
-                // Sort by the category idnumber assigned to the course's category.
-                $sort = 'categoryidnumber';
-                break;
+            // Removed BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER option - not exposed to UI.
 
             case BLOCK_MYOVERVIEW_SORTING_TITLE:
             default:
@@ -512,7 +509,6 @@ class main implements renderable, templatable {
             'selectedcustomfield' => $selectedcustomfield,
             'showsortbyshortname' => $CFG->courselistshortnames,
             'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
-            'categoryidnumber' => $this->sort == BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER,
         ];
         // Make sure client-side templates have the translated sort strings available.
         $page = $output->get_page();
@@ -521,8 +517,7 @@ class main implements renderable, templatable {
             'sortbylastaccessed',
             'sortbyshortname',
             'sortbystartdate',
-            'sortbyidnumber',
-            'sortbycategoryidnumber'
+            'sortbyidnumber'
         ], 'block_myoverview');
 
         return array_merge($defaultvariables, $preferences);

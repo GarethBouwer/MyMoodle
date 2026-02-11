@@ -50,7 +50,6 @@ define('BLOCK_MYOVERVIEW_SORTING_LASTACCESSED', 'lastaccessed');
 define('BLOCK_MYOVERVIEW_SORTING_SHORTNAME', 'shortname');
 define('BLOCK_MYOVERVIEW_SORTING_STARTDATE', 'startdate');
 define('BLOCK_MYOVERVIEW_SORTING_IDNUMBER', 'idnumber');
-define('BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER', 'categoryidnumber');
 
 
 /**
@@ -111,12 +110,11 @@ function block_myoverview_user_preferences(): array {
     'null'   => NULL_NOT_ALLOWED,
     'default'=> BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
     'type'   => PARAM_ALPHA,
-    'choices'=> [
+        'choices'=> [
         BLOCK_MYOVERVIEW_SORTING_LASTACCESSED => get_string('sortbylastaccessed', 'block_myoverview'),
         BLOCK_MYOVERVIEW_SORTING_TITLE        => get_string('sortbytitle', 'block_myoverview'),
         BLOCK_MYOVERVIEW_SORTING_SHORTNAME    => get_string('sortbyshortname', 'block_myoverview'),
         BLOCK_MYOVERVIEW_SORTING_IDNUMBER     => get_string('sortbyidnumber', 'block_myoverview'),
-        BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER => get_string('sortbycategoryidnumber', 'block_myoverview'),
     ],
     'permissioncallback' => [core_user::class, 'is_current_user'],
 ];
