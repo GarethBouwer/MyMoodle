@@ -50,7 +50,8 @@ RUN mkdir -p /var/www/moodledata \
 # Apache vhost: serve ONLY /public (Moodle 5.x requirement) and set ServerName
 RUN printf '%s\n' \
     '<VirtualHost *:80>' \
-    '    ServerName localhost' \
+    '    ServerName clementsandcox.academy' \
+    '    ServerAlias www.clementsandcox.academy' \
     '    DocumentRoot /var/www/html/public' \
     '    <Directory /var/www/html/public>' \
     '        AllowOverride All' \

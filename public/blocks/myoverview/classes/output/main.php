@@ -29,6 +29,8 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
+use moodle_url;
+use single_button;
 
 require_once($CFG->dirroot . '/blocks/myoverview/lib.php');
 
@@ -38,7 +40,7 @@ require_once($CFG->dirroot . '/blocks/myoverview/lib.php');
  * @copyright  2018 Bas Brands <bas@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class main implements renderable, templatable {
+class main implements \renderable, \templatable {
 
     /**
      * Store the grouping preference.
@@ -410,7 +412,7 @@ class main implements renderable, templatable {
      * @throws \coding_exception
      *
      */
-    public function export_for_template(renderer_base $output) {
+    public function export_for_template(\renderer_base $output) {
         global $CFG, $USER;
 
         $nocoursesurl = $output->image_url('courses', 'block_myoverview')->out();
@@ -526,7 +528,7 @@ class main implements renderable, templatable {
      * @throws \coding_exception
      *
      */
-    public function export_for_zero_state_template(renderer_base $output) {
+    public function export_for_zero_state_template(\renderer_base $output) {
         global $CFG, $DB;
 
         $nocoursesimg = $output->image_url('courses', 'block_myoverview');

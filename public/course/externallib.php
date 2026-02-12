@@ -39,6 +39,10 @@ use core_external\external_value;
 use core_external\external_warnings;
 use core_external\util;
 require_once(__DIR__ . "/lib.php");
+use moodle_exception;
+use html_writer;
+use cm_info;
+use core_component;
 
 /**
  * Course external functions

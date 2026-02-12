@@ -23,7 +23,7 @@ $CFG->dboptions = array(
 
 // ========= PATHS =========
 
-$CFG->wwwroot   = 'https://mymoodle-production.up.railway.app';
+$CFG->wwwroot   = 'https://clementsandcox.academy';
 $CFG->dirroot   = '/var/www/html';
 $CFG->dataroot  = '/var/www/moodledata';
 $CFG->libdir    = '/var/www/html/lib';
@@ -64,3 +64,15 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 }
 
 require_once(__DIR__ . '/lib/setup.php');
+
+// If running via web and the request used the www subdomain, redirect
+// to the canonical non-www host so both DNS names are supported by DNS
+// while keeping a single canonical `wwwroot`.
+if (php_sapi_name() !== 'cli' && !empty($_SERVER['HTTP_HOST'])) {
+    $host = strtolower($_SERVER['HTTP_HOST']);
+    if (strpos($host, 'www.') === 0 && substr($host, 4) === 'clementsandcox.academy') {
+        $requesturi = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+        header('Location: https://clementsandcox.academy' . $requesturi, true, 301);
+        exit;
+    }
+}
