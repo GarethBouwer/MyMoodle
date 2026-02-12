@@ -1,0 +1,28 @@
+From b8a95877e815ad74adee33f87f36fd249e7656bc Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Thu, 5 Feb 2026 16:58:39 +0200
+Subject: [PATCH 21/33] SMTP Debug
+
+---
+ config.php | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/config.php b/config.php
+index e95c699081d..62bdce15822 100644
+--- a/config.php
++++ b/config.php
+@@ -36,6 +36,11 @@ $CFG->libdir    = '/var/www/html/lib';
+ // $CFG->reverseproxy = true;
+ $CFG->sslproxy     = true;
+ 
++// ========= DEBUG SMTP =========
++$CFG->debug = E_ALL;
++$CFG->debugdisplay = true;
++$CFG->debugsmtp = true;
++
+ 
+ // ========= ADMIN URL SEGMENT =========
+ 
+-- 
+2.48.1.windows.1
+

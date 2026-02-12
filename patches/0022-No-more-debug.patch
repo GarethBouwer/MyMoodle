@@ -1,0 +1,29 @@
+From 5760126c93d41054ef507acc446ee84dcac91318 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Thu, 5 Feb 2026 17:44:26 +0200
+Subject: [PATCH 22/33] No more debug
+
+---
+ config.php | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/config.php b/config.php
+index 62bdce15822..b596564871b 100644
+--- a/config.php
++++ b/config.php
+@@ -37,9 +37,9 @@ $CFG->libdir    = '/var/www/html/lib';
+ $CFG->sslproxy     = true;
+ 
+ // ========= DEBUG SMTP =========
+-$CFG->debug = E_ALL;
+-$CFG->debugdisplay = true;
+-$CFG->debugsmtp = true;
++// $CFG->debug = E_ALL;
++// $CFG->debugdisplay = true;
++// $CFG->debugsmtp = true;
+ 
+ 
+ // ========= ADMIN URL SEGMENT =========
+-- 
+2.48.1.windows.1
+

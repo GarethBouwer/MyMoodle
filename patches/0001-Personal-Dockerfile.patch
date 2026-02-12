@@ -1,0 +1,50 @@
+From c2d6bcc1397cf0b6467ee6cf700ecc833434f2e0 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 07:57:10 +0200
+Subject: [PATCH 01/33] Personal Dockerfile
+
+---
+ Dockerfile | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 Dockerfile
+
+diff --git a/Dockerfile b/Dockerfile
+new file mode 100644
+index 00000000000..0ba1cd21265
+--- /dev/null
++++ b/Dockerfile
+@@ -0,0 +1,31 @@
++# Moodle running on Apache + PHP 8.1 (supported)
++FROM php:8.1-apache
++
++# Enable Apache rewrite
++RUN a2enmod rewrite
++
++# Install dependencies
++RUN apt-get update && apt-get install -y \
++    git \
++    unzip \
++    libpng-dev \
++    libjpeg-dev \
++    libfreetype6-dev \
++    libxml2-dev \
++    libzip-dev \
++    libicu-dev \
++    libcurl4-openssl-dev \
++    libonig-dev \
++    libpq-dev \
++    libldap2-dev \
++    && docker-php-ext-configure gd --with-freetype --with-jpeg \
++    && docker-php-ext-install gd intl xml zip mbstring curl pdo_mysql pdo_pgsql ldap opcache
++
++# Copy Moodle into the container
++COPY . /var/www/html
++
++# Set correct permissions
++RUN chown -R www-data:www-data /var/www/html
++
++# Expose Apache port
++EXPOSE 80
+-- 
+2.48.1.windows.1
+

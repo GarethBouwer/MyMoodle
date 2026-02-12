@@ -1,0 +1,41 @@
+From b00d7639a340c3e5fbdebe2a81905f6dc454c378 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 11:44:09 +0200
+Subject: [PATCH 26/33] sortid again
+
+---
+ public/blocks/myoverview/classes/output/main.php             | 1 +
+ .../blocks/myoverview/templates/nav-sort-selector.mustache   | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/public/blocks/myoverview/classes/output/main.php b/public/blocks/myoverview/classes/output/main.php
+index 18720f5d9ad..c47135b3dfc 100644
+--- a/public/blocks/myoverview/classes/output/main.php
++++ b/public/blocks/myoverview/classes/output/main.php
+@@ -506,6 +506,7 @@ class main implements renderable, templatable {
+             'customfieldvalues' => $customfieldvalues,
+             'selectedcustomfield' => $selectedcustomfield,
+             'showsortbyshortname' => $CFG->courselistshortnames,
++            'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
+         ];
+         return array_merge($defaultvariables, $preferences);
+ 
+diff --git a/public/blocks/myoverview/templates/nav-sort-selector.mustache b/public/blocks/myoverview/templates/nav-sort-selector.mustache
+index d399b31b0e4..8e3e3a030c4 100644
+--- a/public/blocks/myoverview/templates/nav-sort-selector.mustache
++++ b/public/blocks/myoverview/templates/nav-sort-selector.mustache
+@@ -59,6 +59,11 @@
+                     {{#str}} sortbystartdate, block_myoverview {{/str}}
+                 </a>
+             </li>
++            <li>
++                <a class="dropdown-item" href="#" data-filter="sort" data-pref="idnumber" data-value="idnumber" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#idnumber}}aria-current="true"{{/idnumber}}>
++                    {{#str}} sortbyidnumber, block_myoverview {{/str}}
++                 </a>
++            </li>
+         </ul>
+     </div>
+ </div>
+-- 
+2.48.1.windows.1
+

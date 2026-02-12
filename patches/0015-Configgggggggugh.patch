@@ -1,0 +1,90 @@
+From bafd7da6c6e8d3a8777b62948ca3aa1e189b4ff3 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 11:14:08 +0200
+Subject: [PATCH 15/33] Configgggggggugh
+
+---
+ config.php | 52 ++++++++++++++++++++++++++++------------------------
+ 1 file changed, 28 insertions(+), 24 deletions(-)
+
+diff --git a/config.php b/config.php
+index 397030fed70..46c7699fe06 100644
+--- a/config.php
++++ b/config.php
+@@ -4,45 +4,49 @@ unset($CFG);
+ global $CFG;
+ $CFG = new stdClass();
+ 
+-unset($CFG);
+-global $CFG;
+-$CFG = new stdClass();
+-
+ // ========= DATABASE (PostgreSQL on Railway) =========
++
+ $CFG->dbtype    = 'pgsql';
+ $CFG->dblibrary = 'native';
+-
+-// IMPORTANT: set this to the actual PGHOST value from your Postgres service
+-$CFG->dbhost    = 'postgres.railway.internal';
+-
+-$CFG->dbname    = 'railway';  // POSTGRES_DB
+-$CFG->dbuser    = 'postgres'; // POSTGRES_USER
+-$CFG->dbpass    = 'krXPKhTItzkebxZHRAsGMPgTNuTxagzv'; // POSTGRES_PASSWORD
++$CFG->dbhost    = 'postgres.railway.internal';   // Railway internal Postgres host
++$CFG->dbname    = 'railway';
++$CFG->dbuser    = 'postgres';
++$CFG->dbpass    = 'krXPKhTItzkebxZHRAsGMPgTNuTxagzv';
+ $CFG->prefix    = 'mdl_';
+ 
+ $CFG->dboptions = array(
+     'dbpersist' => false,
+-    'dbport'    => 5432,
+     'dbsocket'  => false,
++    'dbport'    => 5432,
+ );
+ 
+ 
+-$CFG->dboptions = array(
+-    'dbpersist' => false,
+-    'dbsocket'  => false,
+-    'dbport'    => 5432,
+-);
++// ========= PATHS =========
++
++$CFG->wwwroot   = 'https://mymoodle-production.up.railway.app';
++$CFG->dirroot   = '/var/www/html';
++$CFG->dataroot  = '/var/www/moodledata';
++$CFG->libdir    = '/var/www/html/lib';
++
++
++// ========= PROXY / RAILWAY REQUIREMENTS =========
+ 
+-// 2. PATHS
+-$CFG->wwwroot  = 'https://mymoodle-production.up.railway.app';      // e.g. https://mymoodle-production.up.railway.app
+-$CFG->dirroot  = '/var/www/html';
+-$CFG->dataroot = '/var/www/moodledata';
+-$CFG->libdir   = '/var/www/html/lib';
++// Railway terminates HTTPS at the edge → container sees HTTP.
++// Moodle MUST be told this to avoid redirect loops.
++$CFG->reverseproxy = true;
++$CFG->sslproxy     = true;
+ 
+ 
+-// 3. ADMIN USERNAME (URL path, not the login)
++// ========= ADMIN URL SEGMENT =========
++
+ $CFG->admin = 'admin';
+ 
+-$CFG->directorypermissions = 02777;
++
++// ========= PERMISSIONS (OK DURING INSTALL PHASE) =========
++
++$CFG->directorypermissions = 0777;
++
++
++// ========= START MOODLE =========
+ 
+ require_once(__DIR__ . '/lib/setup.php');
+-- 
+2.48.1.windows.1
+

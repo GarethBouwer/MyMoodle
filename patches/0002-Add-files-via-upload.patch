@@ -1,0 +1,53 @@
+From 733ae2bbbb4499b1bcb03bf97c42496597116849 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 08:18:17 +0200
+Subject: [PATCH 02/33] Add files via upload
+
+---
+ Dockerfile | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 0ba1cd21265..927dd2b916c 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,10 +1,10 @@
+-# Moodle running on Apache + PHP 8.1 (supported)
+ FROM php:8.1-apache
+ 
+-# Enable Apache rewrite
+-RUN a2enmod rewrite
++# Make sure only one MPM is enabled
++RUN a2dismod mpm_event mpm_worker || true \
++ && a2enmod mpm_prefork rewrite
+ 
+-# Install dependencies
++# Install required libs ONLY (not apache2)
+ RUN apt-get update && apt-get install -y \
+     git \
+     unzip \
+@@ -18,14 +18,15 @@ RUN apt-get update && apt-get install -y \
+     libonig-dev \
+     libpq-dev \
+     libldap2-dev \
+-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+-    && docker-php-ext-install gd intl xml zip mbstring curl pdo_mysql pdo_pgsql ldap opcache
++ && docker-php-ext-configure gd --with-freetype --with-jpeg \
++ && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql ldap opcache \
++ && rm -rf /var/lib/apt/lists/*
+ 
+-# Copy Moodle into the container
++# Copy Moodle
+ COPY . /var/www/html
+ 
+-# Set correct permissions
+-RUN chown -R www-data:www-data /var/www/html
++# Create moodledata (will be overridden by Railway volume but keeps perms right)
++RUN mkdir -p /var/www/moodledata \
++ && chown -R www-data:www-data /var/www/html /var/www/moodledata
+ 
+-# Expose Apache port
+ EXPOSE 80
+-- 
+2.48.1.windows.1
+

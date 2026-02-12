@@ -1,0 +1,22 @@
+From f8b039def9dbae5c005dcdc9c7b6e03be54ba610 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 11:40:31 +0200
+Subject: [PATCH 18/33] AAAAAAAAAAAA
+
+---
+ Dockerfile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 6d909be826d..1eb510dcdc0 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,4 +1,4 @@
+-FROM php:8.1-apache
++FROM php:8.3-apache
+ 
+ # Enable Apache rewrite (required by Moodle for clean URLs)
+ RUN a2enmod rewrite
+-- 
+2.48.1.windows.1
+

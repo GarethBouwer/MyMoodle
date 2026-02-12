@@ -1,0 +1,131 @@
+From 3a92ec8d15e8be9e33109548eb1a0a953eeb77cf Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 15:54:37 +0200
+Subject: [PATCH 30/33] Cleanup
+
+---
+ public/blocks/myoverview/classes/output/main.php         | 9 ++-------
+ public/blocks/myoverview/lang/en/block_myoverview.php    | 1 -
+ public/blocks/myoverview/lib.php                         | 4 +---
+ .../myoverview/templates/nav-sort-selector.mustache      | 8 ++------
+ public/course/externallib.php                            | 6 +-----
+ 5 files changed, 6 insertions(+), 22 deletions(-)
+
+diff --git a/public/blocks/myoverview/classes/output/main.php b/public/blocks/myoverview/classes/output/main.php
+index bd792fb28ff..8b4ad84bb8b 100644
+--- a/public/blocks/myoverview/classes/output/main.php
++++ b/public/blocks/myoverview/classes/output/main.php
+@@ -475,10 +475,7 @@ class main implements renderable, templatable {
+                 // $sort = 'category, idnumber';
+                 break;
+ 
+-            case BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER:
+-                // Sort by the category idnumber assigned to the course's category.
+-                $sort = 'categoryidnumber';
+-                break;
++            // Removed BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER option - not exposed to UI.
+ 
+             case BLOCK_MYOVERVIEW_SORTING_TITLE:
+             default:
+@@ -512,7 +509,6 @@ class main implements renderable, templatable {
+             'selectedcustomfield' => $selectedcustomfield,
+             'showsortbyshortname' => $CFG->courselistshortnames,
+             'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
+-            'categoryidnumber' => $this->sort == BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER,
+         ];
+         // Make sure client-side templates have the translated sort strings available.
+         $page = $output->get_page();
+@@ -521,8 +517,7 @@ class main implements renderable, templatable {
+             'sortbylastaccessed',
+             'sortbyshortname',
+             'sortbystartdate',
+-            'sortbyidnumber',
+-            'sortbycategoryidnumber'
++            'sortbyidnumber'
+         ], 'block_myoverview');
+ 
+         return array_merge($defaultvariables, $preferences);
+diff --git a/public/blocks/myoverview/lang/en/block_myoverview.php b/public/blocks/myoverview/lang/en/block_myoverview.php
+index 3459ab203d4..2ad6468ab2d 100644
+--- a/public/blocks/myoverview/lang/en/block_myoverview.php
++++ b/public/blocks/myoverview/lang/en/block_myoverview.php
+@@ -88,7 +88,6 @@ $string['sortbylastaccessed'] = 'Sort by last accessed';
+ $string['sortbyshortname'] = 'Sort by short name';
+ $string['sortbystartdate'] = 'Sort by start date';
+ $string['sortbyidnumber'] = 'Sort by course ID number';
+-$string['sortbycategoryidnumber'] = 'Sort by category ID number';
+ $string['privacy:request:preference:set'] = 'The value of the setting \'{$a->name}\' was \'{$a->value}\'';
+ $string['viewquickstart'] = 'View Quickstart guide';
+ $string['zero_default_title'] = 'You\'re not enrolled in any courses.';
+diff --git a/public/blocks/myoverview/lib.php b/public/blocks/myoverview/lib.php
+index 76f03847aa6..87f3c954133 100644
+--- a/public/blocks/myoverview/lib.php
++++ b/public/blocks/myoverview/lib.php
+@@ -50,7 +50,6 @@ define('BLOCK_MYOVERVIEW_SORTING_LASTACCESSED', 'lastaccessed');
+ define('BLOCK_MYOVERVIEW_SORTING_SHORTNAME', 'shortname');
+ define('BLOCK_MYOVERVIEW_SORTING_STARTDATE', 'startdate');
+ define('BLOCK_MYOVERVIEW_SORTING_IDNUMBER', 'idnumber');
+-define('BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER', 'categoryidnumber');
+ 
+ 
+ /**
+@@ -111,12 +110,11 @@ function block_myoverview_user_preferences(): array {
+     'null'   => NULL_NOT_ALLOWED,
+     'default'=> BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+     'type'   => PARAM_ALPHA,
+-    'choices'=> [
++        'choices'=> [
+         BLOCK_MYOVERVIEW_SORTING_LASTACCESSED => get_string('sortbylastaccessed', 'block_myoverview'),
+         BLOCK_MYOVERVIEW_SORTING_TITLE        => get_string('sortbytitle', 'block_myoverview'),
+         BLOCK_MYOVERVIEW_SORTING_SHORTNAME    => get_string('sortbyshortname', 'block_myoverview'),
+         BLOCK_MYOVERVIEW_SORTING_IDNUMBER     => get_string('sortbyidnumber', 'block_myoverview'),
+-        BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER => get_string('sortbycategoryidnumber', 'block_myoverview'),
+     ],
+     'permissioncallback' => [core_user::class, 'is_current_user'],
+ ];
+diff --git a/public/blocks/myoverview/templates/nav-sort-selector.mustache b/public/blocks/myoverview/templates/nav-sort-selector.mustache
+index 8f8815e3248..498a42a8253 100644
+--- a/public/blocks/myoverview/templates/nav-sort-selector.mustache
++++ b/public/blocks/myoverview/templates/nav-sort-selector.mustache
+@@ -34,7 +34,7 @@
+                 {{#lastaccessed}}{{#str}} sortbylastaccessed, block_myoverview {{/str}}{{/lastaccessed}}
+                 {{#shortname}}{{#str}} sortbyshortname, block_myoverview {{/str}}{{/shortname}}
+                 {{#startdate}}{{#str}} sortbystartdate, block_myoverview {{/str}}{{/startdate}}
+-                {{#categoryidnumber}}{{#str}} sortbycategoryidnumber, block_myoverview {{/str}}{{/categoryidnumber}}
++                
+             </span>
+         </button>
+         <ul class="dropdown-menu" role="menu" data-show-active-item data-skip-active-class="true" aria-labelledby="sortingdropdown">
+@@ -65,11 +65,7 @@
+                     {{#str}} sortbyidnumber, block_myoverview {{/str}}
+                  </a>
+             </li>
+-            <li>
+-                <a class="dropdown-item" href="#" data-filter="sort" data-pref="categoryidnumber" data-value="categoryidnumber" aria-controls="courses-view-{{uniqid}}" role="menuitem" {{#categoryidnumber}}aria-current="true"{{/categoryidnumber}}>
+-                    {{#str}} sortbycategoryidnumber, block_myoverview {{/str}}
+-                 </a>
+-            </li>
++            
+         </ul>
+     </div>
+ </div>
+diff --git a/public/course/externallib.php b/public/course/externallib.php
+index 32c95254d9a..f4630111365 100644
+--- a/public/course/externallib.php
++++ b/public/course/externallib.php
+@@ -4071,11 +4071,7 @@ class core_course_external extends external_api {
+         $limit = $params['limit'];
+         $offset = $params['offset'];
+         $sort = $params['sort'];
+-        // Support sorting by category idnumber (the idnumber assigned to the course's category).
+-        // Translate the token into an SQL expression that can be used in the ORDER BY.
+-        if ($sort === 'categoryidnumber') {
+-            $sort = "(SELECT cc.idnumber FROM {course_categories} cc WHERE cc.id = c.category)";
+-        }
++        // Note: support for sorting by category idnumber was removed from the course overview block.
+         $customfieldvalue = $params['customfieldvalue'];
+         $searchvalue = clean_param($params['searchvalue'], PARAM_TEXT);
+         $requiredfields = $params['requiredfields'];
+-- 
+2.48.1.windows.1
+

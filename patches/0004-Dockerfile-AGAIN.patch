@@ -1,0 +1,41 @@
+From 18e1b62e21c91b146fcc35cf62edcbd31e6646a7 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 08:35:07 +0200
+Subject: [PATCH 04/33] Dockerfile AGAIN
+
+---
+ Dockerfile | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 64b0ce1cbf0..33b470ffbaf 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,7 +1,7 @@
+-# Moodle running on Apache + PHP 8.1 (supported)
++# Moodle running on Apache + PHP 8.1
+ FROM php:8.1-apache
+ 
+-# Make sure only one MPM is loaded + enable rewrite
++# Make sure ONLY prefork MPM is enabled + enable rewrite
+ RUN a2dismod mpm_event mpm_worker || true \
+  && a2enmod mpm_prefork rewrite
+ 
+@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
+     libpq-dev \
+     libldap2-dev \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+- && docker-php-ext-install gd intl xml zip mbstring curl pdo_mysql pdo_pgsql ldap opcache \
++ && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql ldap opcache \
+  && rm -rf /var/lib/apt/lists/*
+ 
+ # Copy Moodle into the container
+@@ -30,5 +30,4 @@ COPY . /var/www/html
+ RUN mkdir -p /var/www/moodledata \
+  && chown -R www-data:www-data /var/www/html /var/www/moodledata
+ 
+-# Expose Apache port
+ EXPOSE 80
+-- 
+2.48.1.windows.1
+

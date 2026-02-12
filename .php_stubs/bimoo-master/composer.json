@@ -1,0 +1,27 @@
+{
+    "name": "machitgarha/bimoo",
+    "description": "Moodle declaration stubs, helping IDEs and static analyzers",
+    "type": "library",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Mohammad Amin Chitgarha",
+            "email": "machitgarha@outlook.com",
+            "homepage": "https://github.com/machitgarha",
+            "role": "Creator"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0"
+    },
+    "require-dev": {
+        "php-stubs/generator": "^0.7",
+        "symfony/console": "^5.3",
+        "webmozart/path-util": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MAChitgarha\\Bimoo\\": "src"
+        }
+    }
+}

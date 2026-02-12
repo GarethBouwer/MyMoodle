@@ -1,0 +1,39 @@
+From b9c43a7c98d0c9119101fe3c804ee1f86982f683 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 09:44:49 +0200
+Subject: [PATCH 24/33] Visibiliy Fix
+
+---
+ .../blocks/sortedcourses/block_sortedcourses.php | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/public/blocks/sortedcourses/block_sortedcourses.php b/public/blocks/sortedcourses/block_sortedcourses.php
+index d63ab2aae5f..8a3f67e8602 100644
+--- a/public/blocks/sortedcourses/block_sortedcourses.php
++++ b/public/blocks/sortedcourses/block_sortedcourses.php
+@@ -8,15 +8,13 @@ class block_sortedcourses extends block_base {
+     }
+ 
+     public function applicable_formats() {
+-        // Only show on the Dashboard.
+-        return [
+-            'my' => true,
+-            'site' => false,
+-            'course-view' => false,
+-            'mod' => false,
+-            'tag' => false
+-        ];
+-    }
++    // Allow on all pages – you can still choose
++    // where to place it via the UI.
++    return [
++        'all' => true
++    ];
++}
++
+ 
+     public function instance_allow_multiple() {
+         // Only one instance per Dashboard.
+-- 
+2.48.1.windows.1
+

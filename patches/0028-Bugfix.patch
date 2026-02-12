@@ -1,0 +1,50 @@
+From a815e73f6d68701f3b798939e465ea3378669474 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 15:19:58 +0200
+Subject: [PATCH 28/33] Bugfix
+
+---
+ public/blocks/myoverview/classes/output/main.php      | 11 +++++++++++
+ public/blocks/myoverview/lang/en/block_myoverview.php |  4 ++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/public/blocks/myoverview/classes/output/main.php b/public/blocks/myoverview/classes/output/main.php
+index a8c94b5bce4..bd792fb28ff 100644
+--- a/public/blocks/myoverview/classes/output/main.php
++++ b/public/blocks/myoverview/classes/output/main.php
+@@ -514,6 +514,17 @@ class main implements renderable, templatable {
+             'idnumber'      => $this->sort == BLOCK_MYOVERVIEW_SORTING_IDNUMBER,
+             'categoryidnumber' => $this->sort == BLOCK_MYOVERVIEW_SORTING_CATEGORY_IDNUMBER,
+         ];
++        // Make sure client-side templates have the translated sort strings available.
++        $page = $output->get_page();
++        $page->requires->strings_for_js([
++            'sortbytitle',
++            'sortbylastaccessed',
++            'sortbyshortname',
++            'sortbystartdate',
++            'sortbyidnumber',
++            'sortbycategoryidnumber'
++        ], 'block_myoverview');
++
+         return array_merge($defaultvariables, $preferences);
+ 
+     }
+diff --git a/public/blocks/myoverview/lang/en/block_myoverview.php b/public/blocks/myoverview/lang/en/block_myoverview.php
+index 9a8c81b4172..dee4636dcc9 100644
+--- a/public/blocks/myoverview/lang/en/block_myoverview.php
++++ b/public/blocks/myoverview/lang/en/block_myoverview.php
+@@ -87,8 +87,8 @@ $string['sortbytitle'] = 'Sort by course name';
+ $string['sortbylastaccessed'] = 'Sort by last accessed';
+ $string['sortbyshortname'] = 'Sort by short name';
+ $string['sortbystartdate'] = 'Sort by start date';
+-$string['sortbyidnumber'] = 'Course ID number';
+-$string['sortbycategoryidnumber'] = 'Category ID number';
++$string['sortbyidnumber'] = 'Sort by course ID number';
++$string['sortbycategoryidnumber'] = 'Sort by course ID number';
+ $string['privacy:request:preference:set'] = 'The value of the setting \'{$a->name}\' was \'{$a->value}\'';
+ $string['viewquickstart'] = 'View Quickstart guide';
+ $string['zero_default_title'] = 'You\'re not enrolled in any courses.';
+-- 
+2.48.1.windows.1
+

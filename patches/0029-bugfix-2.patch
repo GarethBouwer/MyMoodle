@@ -1,0 +1,56 @@
+From b237e377d368cbf17749a440877082fd558e290a Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 15:36:14 +0200
+Subject: [PATCH 29/33] bugfix 2
+
+---
+ .../myoverview/amd/build/view_nav.min.js      | Bin 3779 -> 3843 bytes
+ public/blocks/myoverview/amd/src/view_nav.js  |   8 +++++++-
+ .../myoverview/lang/en/block_myoverview.php   |   2 +-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/public/blocks/myoverview/amd/build/view_nav.min.js b/public/blocks/myoverview/amd/build/view_nav.min.js
+index 8a346c85b9d00c06f49e399f19a559737539f38b..c1e769378bc5d4caa88f9b0aa5ab73792d90dc66 100644
+GIT binary patch
+delta 108
+zcmX>s+bp-CmLpyxwW!F}t~xnCuQ)#^RZR`b&;ttR7ol-A)RS`Zle6P<EAz`zi^?)n
+n%dHej3sMqGQUi)o(^894^O94G6~H>xb%2y+t>)%A9O`TUtQ06b
+
+delta 44
+xcmZpcJ1o1QmP0;1FTW%+Ei*Z>Br`uxFC{fCu{5VdFSQ~$wE!ft`3{FV8vubd5fA_X
+
+diff --git a/public/blocks/myoverview/amd/src/view_nav.js b/public/blocks/myoverview/amd/src/view_nav.js
+index 02db054f083..936adf2b848 100644
+--- a/public/blocks/myoverview/amd/src/view_nav.js
++++ b/public/blocks/myoverview/amd/src/view_nav.js
+@@ -47,7 +47,13 @@ const updatePreferences = (filter, value) => {
+     }
+ 
+     return setUserPreference(type, value)
+-        .catch(Notification.exception);
++        .catch((err) => {
++            // Avoid showing an undefined dialog to users; log and silently continue.
++            // Notification.exception sometimes renders a generic/undefined message in older builds.
++            // Logging helps debugging while preventing a confusing alert.
++            // eslint-disable-next-line no-console
++            console && console.error && console.error('block_myoverview: updatePreferences error', err);
++        });
+ };
+ 
+ /**
+diff --git a/public/blocks/myoverview/lang/en/block_myoverview.php b/public/blocks/myoverview/lang/en/block_myoverview.php
+index dee4636dcc9..3459ab203d4 100644
+--- a/public/blocks/myoverview/lang/en/block_myoverview.php
++++ b/public/blocks/myoverview/lang/en/block_myoverview.php
+@@ -88,7 +88,7 @@ $string['sortbylastaccessed'] = 'Sort by last accessed';
+ $string['sortbyshortname'] = 'Sort by short name';
+ $string['sortbystartdate'] = 'Sort by start date';
+ $string['sortbyidnumber'] = 'Sort by course ID number';
+-$string['sortbycategoryidnumber'] = 'Sort by course ID number';
++$string['sortbycategoryidnumber'] = 'Sort by category ID number';
+ $string['privacy:request:preference:set'] = 'The value of the setting \'{$a->name}\' was \'{$a->value}\'';
+ $string['viewquickstart'] = 'View Quickstart guide';
+ $string['zero_default_title'] = 'You\'re not enrolled in any courses.';
+-- 
+2.48.1.windows.1
+

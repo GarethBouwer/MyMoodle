@@ -1,0 +1,235 @@
+From c5b15cf7aae19724bc2735ddc565c5312b3e2e31 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 09:34:03 +0200
+Subject: [PATCH 23/33] SortedCourses
+
+---
+ .../sortedcourses/block_sortedcourses.php     | 120 ++++++++++++++++++
+ public/blocks/sortedcourses/db/access.php     |  23 ++++
+ .../lang/en/block_sortedcourses.php           |  14 ++
+ public/blocks/sortedcourses/settings.php      |  19 +++
+ public/blocks/sortedcourses/version.php       |   8 ++
+ 5 files changed, 184 insertions(+)
+ create mode 100644 public/blocks/sortedcourses/block_sortedcourses.php
+ create mode 100644 public/blocks/sortedcourses/db/access.php
+ create mode 100644 public/blocks/sortedcourses/lang/en/block_sortedcourses.php
+ create mode 100644 public/blocks/sortedcourses/settings.php
+ create mode 100644 public/blocks/sortedcourses/version.php
+
+diff --git a/public/blocks/sortedcourses/block_sortedcourses.php b/public/blocks/sortedcourses/block_sortedcourses.php
+new file mode 100644
+index 00000000000..d63ab2aae5f
+--- /dev/null
++++ b/public/blocks/sortedcourses/block_sortedcourses.php
+@@ -0,0 +1,120 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++class block_sortedcourses extends block_base {
++
++    public function init() {
++        $this->title = get_string('sortedcourses', 'block_sortedcourses');
++    }
++
++    public function applicable_formats() {
++        // Only show on the Dashboard.
++        return [
++            'my' => true,
++            'site' => false,
++            'course-view' => false,
++            'mod' => false,
++            'tag' => false
++        ];
++    }
++
++    public function instance_allow_multiple() {
++        // Only one instance per Dashboard.
++        return false;
++    }
++
++    public function get_content() {
++        global $USER, $CFG, $OUTPUT;
++
++        if ($this->content !== null) {
++            return $this->content;
++        }
++
++        $this->content = new stdClass();
++        $this->content->text = '';
++        $this->content->footer = '';
++
++        require_once($CFG->libdir . '/enrollib.php');
++
++        $fields = 'id, fullname, shortname, idnumber, category, visible';
++        $courses = enrol_get_users_courses($USER->id, true, $fields, 'fullname ASC');
++
++        if (empty($courses)) {
++            $this->content->text = html_writer::tag('p',
++                get_string('nocourses', 'block_sortedcourses')
++            );
++            return $this->content;
++        }
++
++        $sortmode = get_config('block_sortedcourses', 'sortmode');
++        if ($sortmode !== 'category') {
++            $sortmode = 'idnumber';
++        }
++
++        $courselist = array_values($courses);
++
++        if ($sortmode === 'idnumber') {
++            usort($courselist, function($a, $b) {
++                $aid = $a->idnumber ?? '';
++                $bid = $b->idnumber ?? '';
++
++                if ($aid === '' && $bid === '') {
++                    return strcmp($a->shortname, $b->shortname);
++                }
++                if ($aid === '') {
++                    return 1;
++                }
++                if ($bid === '') {
++                    return -1;
++                }
++
++                $cmp = strcmp($aid, $bid);
++                if ($cmp === 0) {
++                    return strcmp($a->shortname, $b->shortname);
++                }
++                return $cmp;
++            });
++        } else {
++            usort($courselist, function($a, $b) {
++                if ($a->category == $b->category) {
++                    return strcmp($a->shortname, $b->shortname);
++                }
++                return $a->category <=> $b->category;
++            });
++        }
++
++        $items = [];
++        foreach ($courselist as $course) {
++            if (empty($course->visible)) {
++                continue;
++            }
++
++            $courseurl = new moodle_url('/course/view.php', ['id' => $course->id]);
++            $label = $course->fullname;
++
++            if (!empty($course->idnumber)) {
++                $label = '[' . $course->idnumber . '] ' . $label;
++            } else {
++                $label = '[' . $course->shortname . '] ' . $label;
++            }
++
++            $items[] = html_writer::tag('li',
++                html_writer::link($courseurl, $label)
++            );
++        }
++
++        if (empty($items)) {
++            $this->content->text = html_writer::tag('p',
++                get_string('nocourses', 'block_sortedcourses')
++            );
++        } else {
++            $this->content->text = html_writer::tag(
++                'ul',
++                implode('', $items),
++                ['class' => 'list-unstyled']
++            );
++        }
++
++        return $this->content;
++    }
++}
+diff --git a/public/blocks/sortedcourses/db/access.php b/public/blocks/sortedcourses/db/access.php
+new file mode 100644
+index 00000000000..6e1d6ff6d51
+--- /dev/null
++++ b/public/blocks/sortedcourses/db/access.php
+@@ -0,0 +1,23 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++$capabilities = [
++    'block/sortedcourses:myaddinstance' => [
++        'captype' => 'write',
++        'contextlevel' => CONTEXT_SYSTEM,
++        'archetypes' => [
++            'user' => CAP_ALLOW,
++        ],
++        'clonepermissionsfrom' => 'moodle/my:manageblocks'
++    ],
++
++    'block/sortedcourses:addinstance' => [
++        'captype' => 'write',
++        'contextlevel' => CONTEXT_BLOCK,
++        'archetypes' => [
++            'editingteacher' => CAP_ALLOW,
++            'manager' => CAP_ALLOW
++        ],
++        'clonepermissionsfrom' => 'moodle/site:manageblocks'
++    ],
++];
+diff --git a/public/blocks/sortedcourses/lang/en/block_sortedcourses.php b/public/blocks/sortedcourses/lang/en/block_sortedcourses.php
+new file mode 100644
+index 00000000000..9a9b2b53607
+--- /dev/null
++++ b/public/blocks/sortedcourses/lang/en/block_sortedcourses.php
+@@ -0,0 +1,14 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++$string['pluginname'] = 'Sorted courses';
++$string['sortedcourses'] = 'Sorted courses';
++$string['sortedcourses:addinstance'] = 'Add a new Sorted courses block';
++$string['sortedcourses:myaddinstance'] = 'Add a new Sorted courses block to the Dashboard';
++
++$string['sortmode'] = 'Sort mode';
++$string['sortmode_desc'] = 'Choose how to sort courses in the Sorted courses block.';
++$string['sortmode_idnumber'] = 'By course ID number (e.g. ITFP-1, ITFP-2-1)';
++$string['sortmode_category'] = 'By category, then course short name';
++
++$string['nocourses'] = 'You are not enrolled in any courses.';
+diff --git a/public/blocks/sortedcourses/settings.php b/public/blocks/sortedcourses/settings.php
+new file mode 100644
+index 00000000000..bbf88c4ebc8
+--- /dev/null
++++ b/public/blocks/sortedcourses/settings.php
+@@ -0,0 +1,19 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++if ($ADMIN->fulltree) {
++
++    $name = 'block_sortedcourses/sortmode';
++    $title = get_string('sortmode', 'block_sortedcourses');
++    $description = get_string('sortmode_desc', 'block_sortedcourses');
++
++    $options = [
++        'idnumber' => get_string('sortmode_idnumber', 'block_sortedcourses'),
++        'category' => get_string('sortmode_category', 'block_sortedcourses'),
++    ];
++
++    $default = 'idnumber';
++
++    $setting = new admin_setting_configselect($name, $title, $description, $default, $options);
++    $settings->add($setting);
++}
+diff --git a/public/blocks/sortedcourses/version.php b/public/blocks/sortedcourses/version.php
+new file mode 100644
+index 00000000000..e0d3c67480a
+--- /dev/null
++++ b/public/blocks/sortedcourses/version.php
+@@ -0,0 +1,8 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++$plugin->component = 'block_sortedcourses';
++$plugin->version   = 2026021100;      // YYYYMMDDHH.
++$plugin->requires  = 2020061500;      // Moodle 3.9+; safe for later versions.
++$plugin->maturity  = MATURITY_STABLE;
++$plugin->release   = '1.0';
+-- 
+2.48.1.windows.1
+

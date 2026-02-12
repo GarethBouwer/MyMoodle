@@ -1,0 +1,57 @@
+From d114ec524d8ad293d225d0b9813b8bb744e97564 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 08:42:28 +0200
+Subject: [PATCH 05/33] Dockerfile one million
+
+---
+ Dockerfile           | 13 +++++++------
+ docker-entrypoint.sh |  9 +++++++++
+ 2 files changed, 16 insertions(+), 6 deletions(-)
+ create mode 100644 docker-entrypoint.sh
+
+diff --git a/Dockerfile b/Dockerfile
+index 33b470ffbaf..2bbe89a140c 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,11 +1,6 @@
+-# Moodle running on Apache + PHP 8.1
+ FROM php:8.1-apache
+ 
+-# Make sure ONLY prefork MPM is enabled + enable rewrite
+-RUN a2dismod mpm_event mpm_worker || true \
+- && a2enmod mpm_prefork rewrite
+-
+-# Install dependencies (no extra apache packages here)
++# Install dependencies (no extra apache packages)
+ RUN apt-get update && apt-get install -y \
+     git \
+     unzip \
+@@ -30,4 +25,10 @@ COPY . /var/www/html
+ RUN mkdir -p /var/www/moodledata \
+  && chown -R www-data:www-data /var/www/html /var/www/moodledata
+ 
++# Custom entrypoint that enforces MPM choice at container start
++COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
++RUN chmod +x /usr/local/bin/docker-entrypoint.sh
++
+ EXPOSE 80
++
++CMD ["docker-entrypoint.sh"]
+diff --git a/docker-entrypoint.sh b/docker-entrypoint.sh
+new file mode 100644
+index 00000000000..cb98144a71d
+--- /dev/null
++++ b/docker-entrypoint.sh
+@@ -0,0 +1,9 @@
++#!/bin/bash
++set -e
++
++# Safety: ensure only prefork is enabled before Apache starts
++a2dismod mpm_event mpm_worker 2>/dev/null || true
++a2enmod mpm_prefork rewrite >/dev/null
++
++# Now start Apache in the foreground (same as php:apache default)
++exec apache2-foreground
+-- 
+2.48.1.windows.1
+

@@ -1,0 +1,112 @@
+From 19b49127d7610464b8111fc843d5e59b6c49dbc2 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 11 Feb 2026 10:56:12 +0200
+Subject: [PATCH 25/33] SortbyID fix
+
+---
+ .../blocks/myoverview/classes/output/main.php | 13 +++++++++-
+ .../myoverview/lang/en/block_myoverview.php   |  2 ++
+ public/blocks/myoverview/lib.php              | 26 ++++++++++---------
+ 3 files changed, 28 insertions(+), 13 deletions(-)
+
+diff --git a/public/blocks/myoverview/classes/output/main.php b/public/blocks/myoverview/classes/output/main.php
+index 1b22765817b..18720f5d9ad 100644
+--- a/public/blocks/myoverview/classes/output/main.php
++++ b/public/blocks/myoverview/classes/output/main.php
+@@ -450,7 +450,7 @@ class main implements renderable, templatable {
+                 }
+             }
+         }
+-        $preferences = $this->get_preferences_as_booleans();
++                $preferences = $this->get_preferences_as_booleans();
+         $availablelayouts = $this->get_formatted_available_layouts_for_export();
+         $sort = '';
+ 
+@@ -458,12 +458,23 @@ class main implements renderable, templatable {
+             case BLOCK_MYOVERVIEW_SORTING_SHORTNAME:
+                 $sort = 'shortname';
+                 break;
++
+             case BLOCK_MYOVERVIEW_SORTING_LASTACCESSED:
+                 $sort = 'ul.timeaccess desc';
+                 break;
++
+             case BLOCK_MYOVERVIEW_SORTING_STARTDATE:
+                 $sort = 'startdate';
+                 break;
++
++            case BLOCK_MYOVERVIEW_SORTING_IDNUMBER:
++                // Pure ID number sort:
++                $sort = 'idnumber';
++
++                // If you prefer category + ID number, use this instead:
++                // $sort = 'category, idnumber';
++                break;
++
+             case BLOCK_MYOVERVIEW_SORTING_TITLE:
+             default:
+                 $sort = 'fullname';
+diff --git a/public/blocks/myoverview/lang/en/block_myoverview.php b/public/blocks/myoverview/lang/en/block_myoverview.php
+index ab98fdf4256..7fab9fa046f 100644
+--- a/public/blocks/myoverview/lang/en/block_myoverview.php
++++ b/public/blocks/myoverview/lang/en/block_myoverview.php
+@@ -87,6 +87,7 @@ $string['sortbytitle'] = 'Sort by course name';
+ $string['sortbylastaccessed'] = 'Sort by last accessed';
+ $string['sortbyshortname'] = 'Sort by short name';
+ $string['sortbystartdate'] = 'Sort by start date';
++$string['sortbyidnumber'] = 'Course ID number';
+ $string['privacy:request:preference:set'] = 'The value of the setting \'{$a->name}\' was \'{$a->value}\'';
+ $string['viewquickstart'] = 'View Quickstart guide';
+ $string['zero_default_title'] = 'You\'re not enrolled in any courses.';
+@@ -95,3 +96,4 @@ $string['zero_nocourses_intro'] = 'Need help getting started? Check out the <a h
+ $string['zero_nocourses_title'] = 'Create your first course';
+ $string['zero_request_title'] = 'Request your first course';
+ $string['zero_request_intro'] = 'Need help getting started? Check out the <a href="{$a->dochref}" title="{$a->doctitle}" target="{$a->doctarget}">Moodle documentation</a> or take your first steps with our <a href="{$a->quickhref}" title="{$a->quicktitle}" target="{$a->quicktarget}">Quickstart guide</a>.';
++
+diff --git a/public/blocks/myoverview/lib.php b/public/blocks/myoverview/lib.php
+index 0ea04d61b7c..49eab2c7983 100644
+--- a/public/blocks/myoverview/lib.php
++++ b/public/blocks/myoverview/lib.php
+@@ -49,6 +49,8 @@ define('BLOCK_MYOVERVIEW_SORTING_TITLE', 'title');
+ define('BLOCK_MYOVERVIEW_SORTING_LASTACCESSED', 'lastaccessed');
+ define('BLOCK_MYOVERVIEW_SORTING_SHORTNAME', 'shortname');
+ define('BLOCK_MYOVERVIEW_SORTING_STARTDATE', 'startdate');
++define('BLOCK_MYOVERVIEW_SORTING_IDNUMBER', 'idnumber');
++
+ 
+ /**
+  * Constants for the user preferences view options
+@@ -104,18 +106,18 @@ function block_myoverview_user_preferences(): array {
+         'permissioncallback' => [core_user::class, 'is_current_user'],
+     ];
+ 
+-    $preferences['block_myoverview_user_sort_preference'] = array(
+-        'null' => NULL_NOT_ALLOWED,
+-        'default' => BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+-        'type' => PARAM_ALPHA,
+-        'choices' => array(
+-            BLOCK_MYOVERVIEW_SORTING_TITLE,
+-            BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
+-            BLOCK_MYOVERVIEW_SORTING_SHORTNAME,
+-            BLOCK_MYOVERVIEW_SORTING_STARTDATE,
+-        ),
+-        'permissioncallback' => [core_user::class, 'is_current_user'],
+-    );
++    $preferences['block_myoverview_user_sort_preference'] = [
++    'null'   => NULL_NOT_ALLOWED,
++    'default'=> BLOCK_MYOVERVIEW_SORTING_LASTACCESSED,
++    'type'   => PARAM_ALPHA,
++    'choices'=> [
++        BLOCK_MYOVERVIEW_SORTING_LASTACCESSED => get_string('sortbylastaccessed', 'block_myoverview'),
++        BLOCK_MYOVERVIEW_SORTING_TITLE        => get_string('sortbytitle', 'block_myoverview'),
++        BLOCK_MYOVERVIEW_SORTING_SHORTNAME    => get_string('sortbyshortname', 'block_myoverview'),
++        BLOCK_MYOVERVIEW_SORTING_IDNUMBER     => get_string('sortbyidnumber', 'block_myoverview'),
++    ],
++    'permissioncallback' => [core_user::class, 'is_current_user'],
++];
+ 
+     $preferences['block_myoverview_user_view_preference'] = array(
+         'null' => NULL_NOT_ALLOWED,
+-- 
+2.48.1.windows.1
+

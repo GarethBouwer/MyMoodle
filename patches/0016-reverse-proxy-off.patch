@@ -1,0 +1,25 @@
+From d474f56e6e441a867ea3ab7b247d1b5922cd93b0 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 11:19:45 +0200
+Subject: [PATCH 16/33] reverse proxy off
+
+---
+ config.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.php b/config.php
+index 46c7699fe06..e95c699081d 100644
+--- a/config.php
++++ b/config.php
+@@ -33,7 +33,7 @@ $CFG->libdir    = '/var/www/html/lib';
+ 
+ // Railway terminates HTTPS at the edge → container sees HTTP.
+ // Moodle MUST be told this to avoid redirect loops.
+-$CFG->reverseproxy = true;
++// $CFG->reverseproxy = true;
+ $CFG->sslproxy     = true;
+ 
+ 
+-- 
+2.48.1.windows.1
+

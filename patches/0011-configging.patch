@@ -1,0 +1,25 @@
+From 0a5d8cf57890a9c5ae93d840ecebb6ecb2dd6aea Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 10:09:06 +0200
+Subject: [PATCH 11/33] configging
+
+---
+ config.php | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/config.php b/config.php
+index 8167580278c..a57f1858783 100644
+--- a/config.php
++++ b/config.php
+@@ -23,6 +23,8 @@ $CFG->dboptions = array(
+ $CFG->wwwroot  = 'https://mymoodle-production.up.railway.app/';      // e.g. https://mymoodle-production.up.railway.app
+ $CFG->dirroot  = '/var/www/html';
+ $CFG->dataroot = '/var/www/moodledata';
++$CFG->libdir   = '/var/www/html/lib';
++
+ 
+ // 3. ADMIN USERNAME (URL path, not the login)
+ $CFG->admin = 'admin';
+-- 
+2.48.1.windows.1
+

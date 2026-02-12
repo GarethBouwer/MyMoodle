@@ -1,0 +1,74 @@
+From 7d066517eeee38eff92ee43fe44763d7c605b7d3 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 09:33:13 +0200
+Subject: [PATCH 08/33] I Hate these dockerfiles
+
+---
+ Dockerfile           | 16 +++++++++++++---
+ docker-entrypoint.sh | 15 +++++++++++----
+ 2 files changed, 24 insertions(+), 7 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index a0a786e6b6c..d2c68d407b3 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,6 +1,6 @@
+ FROM php:8.1-apache
+ 
+-# Install Moodle PHP dependencies (Apache + mod_php already set up in this image)
++# Install Moodle PHP dependencies
+ RUN apt-get update && apt-get install -y \
+     git \
+     unzip \
+@@ -18,11 +18,21 @@ RUN apt-get update && apt-get install -y \
+  && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
+  && rm -rf /var/lib/apt/lists/*
+ 
+-# Copy Moodle into the container
++# Moodle lives here
++WORKDIR /var/www/html
++
++# Copy Moodle source
+ COPY . /var/www/html
+ 
+-# Create moodledata and set permissions (Moodle requires this per docs)
++# Moodle data directory (backed by Railway volume)
+ RUN mkdir -p /var/www/moodledata \
+  && chown -R www-data:www-data /var/www/html /var/www/moodledata
+ 
+ EXPOSE 80
++
++# Custom entrypoint that fixes Apache MPMs on Railway (from official Station solution)
++COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
++RUN chmod +x /usr/local/bin/docker-entrypoint.sh
++
++# Use our script as the main command; ENTRYPOINT from php:8.1-apache stays the same
++CMD ["/usr/local/bin/docker-entrypoint.sh"]
+diff --git a/docker-entrypoint.sh b/docker-entrypoint.sh
+index cb98144a71d..5453becf057 100644
+--- a/docker-entrypoint.sh
++++ b/docker-entrypoint.sh
+@@ -1,9 +1,16 @@
+ #!/bin/bash
+ set -e
+ 
+-# Safety: ensure only prefork is enabled before Apache starts
+-a2dismod mpm_event mpm_worker 2>/dev/null || true
+-a2enmod mpm_prefork rewrite >/dev/null
++# Disable all MPM modules to avoid conflicts (Railway-specific issue)
++a2dismod mpm_event 2>/dev/null || true
++a2dismod mpm_worker 2>/dev/null || true
++a2dismod mpm_prefork 2>/dev/null || true
+ 
+-# Now start Apache in the foreground (same as php:apache default)
++# Enable only prefork (required for PHP + mod_php in Moodle)
++a2enmod mpm_prefork
++
++# Moodle needs rewrite
++a2enmod rewrite
++
++# Start Apache in the foreground (required in Docker)
+ exec apache2-foreground
+-- 
+2.48.1.windows.1
+

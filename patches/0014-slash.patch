@@ -1,0 +1,25 @@
+From 87f59ea54d0aa182a34309ecb42595d84160d07f Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 10:56:24 +0200
+Subject: [PATCH 14/33] slash
+
+---
+ config.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config.php b/config.php
+index ffc7cfa2953..397030fed70 100644
+--- a/config.php
++++ b/config.php
+@@ -34,7 +34,7 @@ $CFG->dboptions = array(
+ );
+ 
+ // 2. PATHS
+-$CFG->wwwroot  = 'https://mymoodle-production.up.railway.app/';      // e.g. https://mymoodle-production.up.railway.app
++$CFG->wwwroot  = 'https://mymoodle-production.up.railway.app';      // e.g. https://mymoodle-production.up.railway.app
+ $CFG->dirroot  = '/var/www/html';
+ $CFG->dataroot = '/var/www/moodledata';
+ $CFG->libdir   = '/var/www/html/lib';
+-- 
+2.48.1.windows.1
+

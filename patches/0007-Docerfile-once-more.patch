@@ -1,0 +1,47 @@
+From aa2b6aa5970e45c631c548547fec4bc5a740f3c3 Mon Sep 17 00:00:00 2001
+From: GarethBouwer <itservices@bouwerandco.com>
+Date: Wed, 4 Feb 2026 09:22:41 +0200
+Subject: [PATCH 07/33] Docerfile once more
+
+---
+ Dockerfile | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 2bbe89a140c..a0a786e6b6c 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,6 +1,6 @@
+ FROM php:8.1-apache
+ 
+-# Install dependencies (no extra apache packages)
++# Install Moodle PHP dependencies (Apache + mod_php already set up in this image)
+ RUN apt-get update && apt-get install -y \
+     git \
+     unzip \
+@@ -15,20 +15,14 @@ RUN apt-get update && apt-get install -y \
+     libpq-dev \
+     libldap2-dev \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+- && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql ldap opcache \
++ && docker-php-ext-install gd intl xml zip mbstring curl pdo_pgsql opcache \
+  && rm -rf /var/lib/apt/lists/*
+ 
+ # Copy Moodle into the container
+ COPY . /var/www/html
+ 
+-# Create moodledata and fix permissions
++# Create moodledata and set permissions (Moodle requires this per docs)
+ RUN mkdir -p /var/www/moodledata \
+  && chown -R www-data:www-data /var/www/html /var/www/moodledata
+ 
+-# Custom entrypoint that enforces MPM choice at container start
+-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+-
+ EXPOSE 80
+-
+-CMD ["docker-entrypoint.sh"]
+-- 
+2.48.1.windows.1
+
