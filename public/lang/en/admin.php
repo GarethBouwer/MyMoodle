@@ -420,7 +420,7 @@ $string['configvariables'] = 'Variables';
 $string['configverifychangedemail'] = 'Enables verification of changed email addresses using allowed and denied email domains settings. If this setting is disabled the domains are enforced only when creating new users.';
 $string['configvisiblecourses'] = 'Display courses in hidden categories normally';
 $string['configwarning'] = 'Be careful modifying these settings - strange values could cause problems.';
-$string['configyuicomboloading'] = 'This options enables combined file loading optimisation for YUI libraries. This setting should be enabled on production sites for performance reasons.';
+$string['configyuicomboloading'] = 'This option enables combined file loading optimisation for YUI libraries. It should be enabled for performance reasons.';
 $string['confirmation'] = 'Confirmation';
 $string['confirmationpending'] = 'Confirmation pending';
 $string['confirmcontextlock'] = '{$a->contextname} is currently unfrozen. Freezing it will make it read-only and prevent users from making changes. Are you sure you wish to continue?';
@@ -835,16 +835,12 @@ $string['lockoutemailbody'] = 'Hi {$a->firstname},
 Your account with username {$a->username} on server \'{$a->sitename}\'
 was locked out after multiple invalid login attempts.
 
-To unlock the account immediately go to the following address
+To unlock the account immediately, please click the link below:
 
-{$a->link}
+<a href="{$a->link}">Unlock account</a>
 
-In most mail programs, this should appear as a blue link
-which you can just click on.  If that doesn\'t work,
-then copy and paste the address into the address
-line at the top of your web browser window.
 
-If you need help, please contact the site administrator,
+If you need help, please contact the site administrator.
 {$a->admin}';
 $string['lockoutemailsubject'] = 'Your account on {$a} was locked out';
 $string['lockouterrorunlock'] = 'Invalid account unlock information supplied.';
@@ -985,6 +981,7 @@ $string['maxtimelimit'] = 'Maximum time limit';
 $string['maxtimelimit_desc'] = 'To restrict the maximum PHP execution time that Moodle will allow without any output being displayed, enter a value in seconds here. 0 means that Moodle default restrictions are used. If you have a front-end server with its own time limit, set this value lower to receive PHP errors in logs. Does not apply to CLI scripts.';
 $string['moodlebrandedapp'] = 'Branded Moodle app';
 $string['moodlebrandedappreference'] = 'Alternatively, get a <a href="https://moodle.com/branded-app/">Branded Moodle app</a> with your own custom branding.';
+$string['moodlenetremovalwarning'] = 'The MoodleNet service will be shut down on 20 April 2026. If you wish to continue using MoodleNet on your site, install the MoodleNet plugin from the <a href="https://moodle.org/plugins" target="_blank">Moodle plugins directory <i class="fa fa-external-link" role="img" aria-label="Opens in new window" title="Opens in new window"></i></a> and connect it to a self-hosted MoodleNet instance. Following this, the MoodleNet profile ID field will be removed; please migrate that data if you are using it for other purposes.';
 $string['noreplyaddress'] = 'No-reply address';
 $string['noreplydomain'] = 'No-reply and domain';
 $string['noreplydomaindetail'] = 'Settings for No-reply and configured domains';
@@ -1173,20 +1170,20 @@ $string['requiremodintro'] = 'Require activity description';
 $string['requiremodintro_desc'] = 'If enabled, users will be forced to enter a description for each activity.';
 $string['required'] = 'Required';
 $string['requires'] = 'Requires';
-$string['routerconfigurationset'] = 'Moodle has been informed that the web server is correctly configured.';
+$string['routerconfigurationset'] = 'The web server is correctly configured.';
 $string['routerconfigureddetails'] = 'The router correctly serves <a href="{$a->docs}" target="_blank">{$a->url}</a> with a {$a->expectedstatuscode} ("{$a->expectedstatuscodetitle}") response.';
 $string['routerconfiguredok'] = 'The router appears to be configured correctly.';
 $string['routerconfiguredwithissues'] = 'The router is not correctly configured.';
-$string['routerconfiguredwithissuesdetail'] = 'The router is not correctly configured - Issues were detected in {$a->count} checks.';
+$string['routerconfiguredwithissuesdetail'] = 'The router is not correctly configured. Issues were detected in {$a->count} checks.';
 $string['routerdocs'] = 'Router documentation';
 $string['routerexpectedgot'] = 'Expected {$a->expectedstatuscode} ("{$a->expectedstatuscodetitle}") and received {$a->statuscode} ("{$a->statuscodetitle}").';
 $string['routerfailapipage'] = 'An <a href="{$a->url}" target="_blank">API route</a> did not respond with the expected response.';
 $string['routerfailmissingpage'] = 'The missing page handler did not respond to the <a href="{$a->url}" target="_blank">test URL</a> correctly.';
 $string['routerfailpage'] = 'A <a href="{$a->url}" target="_blank">standard page</a> controller could not be loaded correctly. The router may not be configured properly.';
-$string['routerfailroutershim'] = 'A <a href="{$a->url}" target="_blank">routed page whose path ends in ".php"</a> did not response correctly.';
-$string['routerfailshim'] = 'A <a href="{$a->url}" target="_blank">shimmed page</a> did not response correctly.';
+$string['routerfailroutershim'] = 'A <a href="{$a->url}" target="_blank">routed page with path ending in ".php"</a> did not respond correctly.';
+$string['routerfailshim'] = 'A <a href="{$a->url}" target="_blank">shimmed page</a> did not respond correctly.';
 $string['routernotconfigured'] = 'The router is not configured.';
-$string['routernotconfigureddetail'] = 'The router has not been configured correctly. Please see the <a href="{$a->docs}">documentation</a> for more information on how to configure it correctly.';
+$string['routernotconfigureddetail'] = 'The router is not configured correctly. For details of how to configure it, see the documentation <a href="{$a->docs}">Configuring the router</a>.';
 $string['routernotconfigureddetailwithurl'] = 'The following URL did not return the expected status code: <a href="{$a->url}" target="_blank">{$a->url}</a>.';
 $string['purgecaches'] = 'Purge all caches';
 $string['purgecachesconfirm'] = 'Moodle can cache themes, JavaScript, language strings, filtered text, RSS feeds and other pieces of calculated data. Purging caches will delete data from the server and force browsers to re-fetch data, so you can be sure you are seeing the most up-to-date values produced by the current code. There is no danger in purging caches, but your site may appear slower for a while until the server and clients calculate new information and cache it.';

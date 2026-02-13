@@ -1670,5 +1670,53 @@ function xmldb_main_upgrade($oldversion) {
         upgrade_main_savepoint(true, 2026011600.01);
     }
 
+    if ($oldversion < 2026013000.01) {
+        // Define index nextruntime_classname (not unique) to be added to task_adhoc.
+        $table = new xmldb_table('task_adhoc');
+        $index = new xmldb_index('nextruntime_classname', XMLDB_INDEX_NOTUNIQUE, ['nextruntime', 'classname']);
+
+        // Conditionally launch add index nextruntime_classname.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2026013000.01);
+    }
+
+    if ($oldversion < 2026013000.02) {
+        // Define index lastruntime_nextruntime (not unique) to be added to task_scheduled.
+        $table = new xmldb_table('task_scheduled');
+        $index = new xmldb_index('lastruntime_nextruntime', XMLDB_INDEX_NOTUNIQUE, ['lastruntime', 'nextruntime']);
+
+        // Conditionally launch add index lastruntime_nextruntime.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2026013000.02);
+    }
+
+    if ($oldversion < 2026013000.03) {
+        core_question\versions::resolve_unique_version_violations();
+
+        // Define index questionbankentryid-version (unique) to be added to question_versions.
+        $table = new xmldb_table('question_versions');
+        $index = new xmldb_index('questionbankentryid-version', XMLDB_INDEX_UNIQUE, ['questionbankentryid', 'version']);
+
+        // Conditionally launch add index questionbankentryid-version.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        upgrade_main_savepoint(true, 2026013000.03);
+    }
+
+    if ($oldversion < 2026013000.04) {
+        \core_question\category_manager::fix_restored_category_parents();
+        // Main savepoint reached.
+        upgrade_main_savepoint(true, 2026013000.04);
+    }
+
     return true;
 }
